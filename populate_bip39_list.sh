@@ -17,7 +17,13 @@ while IFS= read -r line; do
   word=$(echo "$line" | awk '{print $2}')
   bits=$(echo "$line" | awk '{print $3}')
   symbols=$(echo "$line" | awk '{print $4}')
-  echo "      <li><span class=\"word\">$word</span> <span class=\"bits\">$bits</span> <span class=\"symbols\">$symbols</span></li>" >> "$TMPFILE"
+  # Wrap each symbol character
+  symbol_html=""
+  for ((i=0; i<${#symbols}; i++)); do
+    char="${symbols:$i:1}"
+    symbol_html+="<span class=\"symbol-char\">$char</span>"
+  done
+  echo "      <li><span class=\"word\">$word</span> <span class=\"bits\">$bits</span> <span class=\"symbols\">$symbol_html</span></li>" >> "$TMPFILE"
 done <<< "$LINES"
 
 # Insert before </ul><!--/words--> by printing file line by line

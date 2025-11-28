@@ -4,6 +4,19 @@
 
 WORDLIST="BIP39-english-wordlist.txt"
 
+# Check if bc is installed
+if ! command -v bc >/dev/null 2>&1; then
+    echo "Error: 'bc' is not installed."
+    read -p "Do you want to install 'bc' with apt? [Y/n] " reply
+    reply=${reply,,} # to lowercase
+    if [[ "$reply" =~ ^(y|yes|)$ ]]; then
+        sudo apt update && sudo apt install -y bc
+    else
+        echo "Exiting."
+        exit 1
+    fi
+fi
+
 # Function to convert binary to symbols
 bin_to_symbols() {
     local bin="$1"
